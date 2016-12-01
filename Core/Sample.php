@@ -2,5 +2,5 @@
 declare(strict_types = 1);
 namespace Klapuch\Project;
 
-final class Sample {
+interface Sample {
 }
