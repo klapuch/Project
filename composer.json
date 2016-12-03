@@ -33,5 +33,15 @@
 				"Tests/"
 			]
 		}
+	},
+	"scripts": {
+		"phpcs": "phpcs Core --standard=ruleset.xml -p",
+		"phpcpd": "phpcpd Core",
+		"test": "tester -o console -s -p php-cgi -c Tests/php.ini Tests/",
+		"bfc": [
+			"@phpcs",
+			"@phpcpd",
+			"@test"
+		]
 	}
 }
