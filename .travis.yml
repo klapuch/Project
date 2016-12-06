@@ -1,5 +1,4 @@
-sudo: required
-dist: trusty
+sudo: false
 
 language: php
 
@@ -28,7 +27,7 @@ after_script:
       && php coveralls.phar --verbose --config Tests/.coveralls.yml
       || true; fi
 script:
-  - ./vendor/bin/tester -p $PHP_BIN -o console -s $coverage ./Tests/
+  - ./vendor/bin/tester -c Tests/php.ini -p $PHP_BIN -o console -s $coverage ./Tests/
   - ./vendor/bin/phpcs Core --standard=ruleset.xml -p
   - ./vendor/bin/phpcpd Core
   - ./vendor/bin/phpstan analyze -l 4 -c phpstan.neon Core Tests
