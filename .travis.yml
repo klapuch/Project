@@ -27,10 +27,11 @@ after_script:
       && php coveralls.phar --verbose --config Tests/.coveralls.yml
       || true; fi
 script:
-  - ./vendor/bin/tester -c Tests/php.ini -p $PHP_BIN -o console -s $coverage ./Tests/
-  - ./vendor/bin/phpcs Core --standard=ruleset.xml -p
+  - ./vendor/bin/parallel-lint -e php,phpt Core Tests
   - ./vendor/bin/phpcpd Core
   - ./vendor/bin/phpstan analyze -l 4 -c phpstan.neon Core Tests
+  - ./vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp Core
+  - ./vendor/bin/tester -c Tests/php.ini -p $PHP_BIN -o console -s $coverage ./Tests/
 
 after_failure:
   - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
