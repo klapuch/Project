@@ -5,11 +5,11 @@ namespace Klapuch\Project\TestCase;
 use Tester;
 
 abstract class Mockery extends Tester\TestCase {
-	final protected function mock($class) {
+	final protected function mock(string $class): \Mockery\MockInterface {
 		return \Mockery::mock($class);
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		parent::tearDown();
 		\Mockery::close();
 	}

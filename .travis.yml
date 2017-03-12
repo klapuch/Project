@@ -1,13 +1,9 @@
-sudo: false
+sudo: required
 
 language: php
 
 php:
   - 7.1
-
-env:
-  - PHP_BIN="php"
-  - PHP_BIN="php-cgi"
 
 matrix:
     include:
@@ -18,7 +14,7 @@ before_install:
   - composer self-update
 
 install:
-  - composer install --prefer-dist --no-progress --no-suggest --no-scripts
+  - composer install --no-interaction --prefer-dist --no-scripts --no-progress --no-suggest --optimize-autoloader --classmap-authoritative
 
 after_script:
     - >
@@ -27,11 +23,8 @@ after_script:
       && php coveralls.phar --verbose --config Tests/.coveralls.yml
       || true; fi
 script:
-  - ./vendor/bin/parallel-lint -e php,phpt Core Tests
-  - ./vendor/bin/phpcpd Core
-  - ./vendor/bin/phpstan analyze -l 5 -c phpstan.neon Core Tests
-  - ./vendor/bin/phpcs --standard=ruleset.xml --extensions=php,phpt --encoding=utf-8 --tab-width=4 -sp Core
-  - ./vendor/bin/tester -c Tests/php.ini -p $PHP_BIN -o console -s $coverage ./Tests/
+  - ./vendor/bin/phing
+  - ./vendor/bin/tester -p phpdbg -c Tests/php.ini -o console -s --coverage coverage.xml --coverage-src Core Tests
 
 after_failure:
   - for i in $(find Tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
